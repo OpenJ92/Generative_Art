@@ -1,0 +1,66 @@
+cabal-version: 1.12
+
+-- This file has been generated from package.yaml by hpack version 0.31.2.
+--
+-- see: https://github.com/sol/hpack
+--
+-- hash: 30a8f448ff71e90b0cf2849f506d0bb2963d8a7f090b568f859084c25783cfe2
+
+name:           haskellschoolofexpression
+version:        0.1.0.0
+description:    Please see the README on GitHub at <https://github.com/OpenJ92/haskellschoolofexpression#readme>
+homepage:       https://github.com/OpenJ92/haskellschoolofexpression#readme
+bug-reports:    https://github.com/OpenJ92/haskellschoolofexpression/issues
+author:         Jacob Vartuli-Schonberg
+maintainer:     jacob.vartuli.schonberg@gmail.com
+copyright:      2021 Jacob Vartuli-Schonberg
+license:        BSD3
+license-file:   LICENSE
+build-type:     Simple
+extra-source-files:
+    README.md
+    ChangeLog.md
+
+source-repository head
+  type: git
+  location: https://github.com/OpenJ92/haskellschoolofexpression
+
+library
+  exposed-modules:
+      Lib
+      Shape
+  other-modules:
+      Paths_haskellschoolofexpression
+  hs-source-dirs:
+      src
+  build-depends:
+      HGL
+    , base >=4.7 && <5
+  default-language: Haskell2010
+
+executable haskellschoolofexpression-exe
+  main-is: Main.hs
+  other-modules:
+      Paths_haskellschoolofexpression
+  hs-source-dirs:
+      app
+  ghc-options: -threaded -rtsopts -with-rtsopts=-N
+  build-depends:
+      HGL
+    , base >=4.7 && <5
+    , haskellschoolofexpression
+  default-language: Haskell2010
+
+test-suite haskellschoolofexpression-test
+  type: exitcode-stdio-1.0
+  main-is: Spec.hs
+  other-modules:
+      Paths_haskellschoolofexpression
+  hs-source-dirs:
+      test
+  ghc-options: -threaded -rtsopts -with-rtsopts=-N
+  build-depends:
+      HGL
+    , base >=4.7 && <5
+    , haskellschoolofexpression
+  default-language: Haskell2010
