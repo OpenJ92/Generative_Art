@@ -1,6 +1,4 @@
-module Shape where
-
-import Graphics.SOE
+module Shape (Shape (Rectangle, Ellipse, RtTriangle, Polygon), Radius, Side, Vertex, square, circle, distBetween, area, produceEquilateralTriangle) where
 
 type Vertex = (,) Float Float
 type Radius = Float
@@ -52,15 +50,21 @@ area (Ellipse r r') = r * r' * pi
 area (Polygon (x:y:z:rs)) = triArea x y z + area (Polygon (x:z:rs))
 area (Polygon _) = 0
 
-distance :: Vertex -> Vertex -> Float
-distance x y = let (z, z') = subtractVertex x y in sqrt $ z^2 + z'^2
+distBetween :: Vertex -> Vertex -> Float
+distBetween x y = let (z, z') = subtractVertex x y in sqrt $ z^2 + z'^2
 
-crossProduct :: Vertex -> Vertex -> Float
-crossProduct (a,b) (c,d) = a*d - b*c
-
--- This resolves the included angle of the given triangle.
 triArea :: Vertex -> Vertex -> Vertex -> Float
 triArea x y z =
-  let u = subtractVertex x y
-      v = subtractVertex z y
-  in asin (crossProduct u v / ((distance x y)*(distance x z)))
+  let a = distBetween x y
+      b = distBetween y z
+      c = distBetween z x
+      s = (a + b + c)*(0.5)
+  in sqrt (s * (s - a) * (s - b) * (s - c))
+
+produceEquilateralTriangle :: Vertex -> Float -> [Vertex]
+produceEquilateralTriangle (x, y) size 
+  = [
+      (x - 2*(size/2), y), 
+      (x + (sqrt 3)*(size/2), y + (size)), 
+      (x + (sqrt 3)*(size/2), y - (size))
+    ]
