@@ -1,4 +1,4 @@
-module Shape (Shape (Rectangle, Ellipse, RtTriangle, Polygon), Radius, Side, Vertex, square, circle, distBetween, area, produceEquilateralTriangle) where
+module Shape (Shape (Rectangle, Ellipse, RtTriangle, Polygon), Radius, Side, Vertex, square, circle, distBetween, area, produceEquilateralTriangle, produceEquilateralTriangle180 ) where
 
 type Vertex = (,) Float Float
 type Radius = Float
@@ -64,7 +64,15 @@ triArea x y z =
 produceEquilateralTriangle :: Vertex -> Float -> [Vertex]
 produceEquilateralTriangle (x, y) size 
   = [
-      (x - 2*(size/2), y), 
-      (x + (sqrt 3)*(size/2), y + (size)), 
-      (x + (sqrt 3)*(size/2), y - (size))
+      (x , y - 2*(size/2)), 
+      (x + (size), y + (sqrt 3)*(size/2)), 
+      (x - (size), y + (sqrt 3)*(size/2))
+    ]
+
+produceEquilateralTriangle180 :: Vertex -> Float -> [Vertex]
+produceEquilateralTriangle180 (x, y) size 
+  = [
+      (x , y + 2*(size/2)), 
+      (x + (size), y - (sqrt 3)*(size/2)), 
+      (x - (size), y - (sqrt 3)*(size/2))
     ]

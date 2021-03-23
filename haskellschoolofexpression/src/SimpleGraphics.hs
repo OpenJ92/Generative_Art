@@ -37,16 +37,22 @@ sierpinskiTri w x y size
                   sierpinskiTri w x (y - size2) size2
                   sierpinskiTri w (x + size2) y size2
 
+-- this is an incorrect constuction
 cochSnowflakeTree :: Graphics.SOE.Window -> Int -> Int -> Int -> Tree (IO ())
-cochSnowflakeTree w x y size = Node (fillPolygon w label) construct
+cochSnowflakeTree w x y size = Node (sequence_ $ fillPolygon w <$> [label, label']) construct
   where
     label@[(a,b), (c,d), (e,f)] = pixelateVertex <$> produceEquilateralTriangle (fromIntegral x, fromIntegral y) (fromIntegral size)
+    label'@[(a',b'), (c',d'), (e',f')] = pixelateVertex <$> produceEquilateralTriangle180 (fromIntegral x, fromIntegral y) (fromIntegral size)
     nsize = div size 3
     construct =
       if nsize >= minSize
          then [ cochSnowflakeTree w a b nsize
               , cochSnowflakeTree w c d nsize
               , cochSnowflakeTree w e f nsize
+              
+              , cochSnowflakeTree w a' b' nsize
+              , cochSnowflakeTree w c' d' nsize
+              , cochSnowflakeTree w e' f' nsize
               ]
          else []
 
