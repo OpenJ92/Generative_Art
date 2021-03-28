@@ -1,4 +1,4 @@
-module Shape (Shape (Rectangle, Ellipse, RtTriangle, Polygon), Radius, Side, Vertex, square, circle, distBetween, area, produceEquilateralTriangle, produceEquilateralTriangle180, eqTriTransform, apply', itterateEqTransform) where
+module Shape (Shape (Rectangle, Ellipse, RtTriangle, Polygon), Radius, Side, Vertex, square, circle, distBetween, area, produceEquilateralTriangle, produceEquilateralTriangle180, eqTriTransform, apply', itterateTransform) where
 
 import Data.List
 
@@ -103,5 +103,5 @@ eqTriTransform x y =
 angleToRadian :: Float -> Float
 angleToRadian angle = pi * angle / 180
 
--- overflow issues in below eq
-itterateEqTransform n = foldl (.) (id) $ (take n . repeat) (apply' eqTriTransform)
+itterateTransform :: (Vertex -> Vertex -> [Vertex]) -> Int -> [Vertex] -> [Vertex]
+itterateTransform f n = foldl (.) (id) $ (take n . repeat) (apply' f)
