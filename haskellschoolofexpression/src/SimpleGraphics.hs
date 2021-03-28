@@ -25,6 +25,9 @@ fillTri w x y size =
 fillPolygon :: Graphics.SOE.Window -> [(Int, Int)] -> IO ()
 fillPolygon w vs = Graphics.SOE.drawInWindow w (Graphics.SOE.withColor Graphics.SOE.White (Graphics.SOE.polygon vs))
 
+fillPolyline :: Graphics.SOE.Window -> [(Int, Int)] -> IO ()
+fillPolyline w vs = Graphics.SOE.drawInWindow w (Graphics.SOE.withColor Graphics.SOE.White (Graphics.SOE.polyline vs))
+
 minSize :: Int
 minSize = 2
 

@@ -1,4 +1,6 @@
-module Shape (Shape (Rectangle, Ellipse, RtTriangle, Polygon), Radius, Side, Vertex, square, circle, distBetween, area, produceEquilateralTriangle, produceEquilateralTriangle180 ) where
+module Shape (Shape (Rectangle, Ellipse, RtTriangle, Polygon), Radius, Side, Vertex, square, circle, distBetween, area, produceEquilateralTriangle, produceEquilateralTriangle180, eqTriTransform, apply', itterateEqTransform) where
+
+import Data.List
 
 type Vertex = (,) Float Float
 type Radius = Float
@@ -17,6 +19,9 @@ addVertex (x,y) (x',y') = (x+x', y+y')
 subtractVertex :: Vertex -> Vertex -> Vertex
 subtractVertex (x,y) (x',y') = (x-x', y-y')
 
+multiplyVertex :: Vertex -> Float -> Vertex
+multiplyVertex (x,y) a = (a*x, a*y)
+ 
 square :: Side -> Shape
 square s = Rectangle s s
 
@@ -66,7 +71,8 @@ produceEquilateralTriangle (x, y) size
   = [
       (x , y - 2*(size/2)), 
       (x + (size), y + (sqrt 3)*(size/2)), 
-      (x - (size), y + (sqrt 3)*(size/2))
+      (x - (size), y + (sqrt 3)*(size/2)),
+      (x , y - 2*(size/2))
     ]
 
 produceEquilateralTriangle180 :: Vertex -> Float -> [Vertex]
@@ -74,5 +80,28 @@ produceEquilateralTriangle180 (x, y) size
   = [
       (x , y + 2*(size/2)), 
       (x + (size), y - (sqrt 3)*(size/2)), 
-      (x - (size), y - (sqrt 3)*(size/2))
+      (x - (size), y - (sqrt 3)*(size/2)),
+      (x , y + 2*(size/2)) 
     ]
+
+apply' :: (Vertex -> Vertex -> [Vertex]) -> [Vertex] -> [Vertex]
+apply' f (x:y:[]) = f x y ++ [y]
+apply' f (x:y:zs)  = f x y ++ apply' f (y:zs)
+
+rotate :: Float -> Vertex -> Vertex
+rotate theta (x,y) = (cos(theta)*x - sin(theta)*y, sin(theta)*x + cos(theta)*y)
+
+eqTriTransform :: Vertex -> Vertex -> [Vertex]
+eqTriTransform x y = 
+  let y'           = subtractVertex y x
+      (a:b:[])     = (multiplyVertex) y' <$> [1/3, 2/3]
+      c'           = addVertex a $ rotate (angleToRadian (-60)) a
+      ys''         = a:c':b:[]
+      ys           = addVertex x <$> ys''
+  in x:ys
+
+angleToRadian :: Float -> Float
+angleToRadian angle = pi * angle / 180
+
+-- overflow issues in below eq
+itterateEqTransform n = foldl (.) (id) $ (take n . repeat) (apply' eqTriTransform)
